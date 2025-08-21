@@ -1,0 +1,633 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SMTP Mailer - Hosting Tutorial</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --primary: #4361ee;
+            --secondary: #3a0ca3;
+            --success: #4cc9f0;
+            --warning: #f72585;
+            --light: #f8f9fa;
+            --dark: #212529;
+            --gray: #6c757d;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        body {
+            background: linear-gradient(135deg, #f5f7ff 0%, #e3e6ff 100%);
+            color: var(--dark);
+            line-height: 1.6;
+            min-height: 100vh;
+            padding: 20px;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        
+        header {
+            text-align: center;
+            margin-bottom: 30px;
+            padding: 25px;
+            background: linear-gradient(120deg, var(--primary), var(--secondary));
+            color: white;
+            border-radius: 15px;
+            box-shadow: 0 6px 15px rgba(0, 0, 0, 0.1);
+        }
+        
+        h1 {
+            font-size: 2.8rem;
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 15px;
+        }
+        
+        .logo {
+            font-size: 2.5rem;
+        }
+        
+        .card {
+            background: white;
+            border-radius: 15px;
+            padding: 25px;
+            margin-bottom: 25px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+            transition: transform 0.3s;
+        }
+        
+        .card:hover {
+            transform: translateY(-5px);
+        }
+        
+        .card-title {
+            font-size: 1.5rem;
+            margin-bottom: 20px;
+            color: var(--primary);
+            border-bottom: 2px solid var(--light);
+            padding-bottom: 10px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .steps {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+        
+        .step-card {
+            flex: 1 1 300px;
+            background: white;
+            border-radius: 15px;
+            padding: 25px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+            transition: transform 0.3s;
+        }
+        
+        .step-card:hover {
+            transform: translateY(-5px);
+        }
+        
+        .step-number {
+            width: 40px;
+            height: 40px;
+            background: var(--primary);
+            color: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            margin-bottom: 15px;
+        }
+        
+        .form-group {
+            margin-bottom: 20px;
+        }
+        
+        label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+            color: var(--dark);
+        }
+        
+        input, textarea, select {
+            width: 100%;
+            padding: 14px;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            font-size: 16px;
+            transition: all 0.3s;
+        }
+        
+        input:focus, textarea:focus, select:focus {
+            border-color: var(--primary);
+            outline: none;
+            box-shadow: 0 0 0 3px rgba(67, 97, 238, 0.2);
+        }
+        
+        button {
+            background: var(--primary);
+            color: white;
+            border: none;
+            padding: 14px 25px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 16px;
+            font-weight: 600;
+            transition: all 0.3s;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        button:hover {
+            background: var(--secondary);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+        
+        .btn-success {
+            background: var(--success);
+        }
+        
+        .btn-success:hover {
+            background: #3aafd6;
+        }
+        
+        .btn-warning {
+            background: var(--warning);
+        }
+        
+        .btn-warning:hover {
+            background: #d61a6b;
+        }
+        
+        .tabs {
+            display: flex;
+            margin-bottom: 20px;
+            border-bottom: 1px solid #ddd;
+            background: white;
+            border-radius: 10px;
+            overflow: hidden;
+        }
+        
+        .tab {
+            padding: 15px 25px;
+            cursor: pointer;
+            border-bottom: 3px solid transparent;
+            flex: 1;
+            text-align: center;
+            font-weight: 600;
+            transition: all 0.3s;
+        }
+        
+        .tab:hover {
+            background: #f8f9fa;
+        }
+        
+        .tab.active {
+            border-bottom: 3px solid var(--primary);
+            color: var(--primary);
+            background: #f0f4ff;
+        }
+        
+        .tab-content {
+            display: none;
+        }
+        
+        .tab-content.active {
+            display: block;
+        }
+        
+        .alert {
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+        
+        .alert-success {
+            background-color: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
+        }
+        
+        .alert-error {
+            background-color: #f8d7da;
+            color: #721c24;
+            border: 1px solid #f5c6cb;
+        }
+        
+        .progress {
+            height: 25px;
+            background-color: #e9ecef;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            overflow: hidden;
+            box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.1);
+        }
+        
+        .progress-bar {
+            height: 100%;
+            background: linear-gradient(90deg, var(--success), #3aafd6);
+            text-align: center;
+            line-height: 25px;
+            color: white;
+            transition: width 0.3s;
+            font-weight: 600;
+        }
+        
+        .instructions {
+            background: linear-gradient(135deg, #e9ecef 0%, #dde1e7 100%);
+            padding: 20px;
+            border-radius: 10px;
+            margin-top: 30px;
+            border-left: 5px solid var(--primary);
+        }
+        
+        .instructions h3 {
+            margin-bottom: 15px;
+            color: var(--dark);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .instructions ol {
+            margin-left: 20px;
+        }
+        
+        .instructions li {
+            margin-bottom: 12px;
+            padding-left: 5px;
+        }
+        
+        footer {
+            text-align: center;
+            margin-top: 40px;
+            padding: 25px;
+            color: var(--gray);
+            font-size: 0.9rem;
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+        }
+        
+        .editor-container {
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            overflow: hidden;
+            margin-bottom: 20px;
+        }
+        
+        .toolbar {
+            background: #f8f9fa;
+            padding: 10px;
+            border-bottom: 1px solid #ddd;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 5px;
+        }
+        
+        .toolbar button {
+            padding: 8px 12px;
+            background: white;
+            color: var(--dark);
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            font-size: 14px;
+        }
+        
+        .toolbar button:hover {
+            background: #e9ecef;
+            transform: none;
+            box-shadow: none;
+        }
+        
+        #html-editor {
+            min-height: 250px;
+            padding: 15px;
+        }
+        
+        .preview-container {
+            background: #f8f9fa;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            padding: 20px;
+            margin-top: 20px;
+        }
+        
+        .preview-title {
+            font-size: 1.2rem;
+            margin-bottom: 15px;
+            color: var(--dark);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .code-block {
+            background: #2d2d2d;
+            color: #f8f8f2;
+            padding: 15px;
+            border-radius: 8px;
+            margin: 15px 0;
+            overflow-x: auto;
+            font-family: 'Fira Code', monospace;
+        }
+        
+        @media (max-width: 768px) {
+            .container {
+                padding: 10px;
+            }
+            
+            h1 {
+                font-size: 2.2rem;
+            }
+            
+            .card {
+                padding: 20px;
+            }
+            
+            .tabs {
+                flex-direction: column;
+            }
+            
+            .tab {
+                padding: 12px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1><i class="fas fa-paper-plane logo"></i> SMTP Mailer Tutorial</h1>
+            <p>Step-by-step guide to hosting and using the SMTP Mailer on GitHub</p>
+        </header>
+        
+        <div class="steps">
+            <div class="step-card">
+                <div class="step-number">1</div>
+                <h3>Create GitHub Account</h3>
+                <p>If you don't have one, create a free account at github.com</p>
+            </div>
+            
+            <div class="step-card">
+                <div class="step-number">2</div>
+                <h3>Create a New Repository</h3>
+                <p>Create a new repository named "smtp-mailer" (or similar)</p>
+            </div>
+            
+            <div class="step-card">
+                <div class="step-number">3</div>
+                <h3>Enable GitHub Pages</h3>
+                <p>Go to Settings → Pages → Select "main" branch → Save</p>
+            </div>
+            
+            <div class="step-card">
+                <div class="step-number">4</div>
+                <h3>Sign up for EmailJS</h3>
+                <p>Create a free account at emailjs.com to handle SMTP</p>
+            </div>
+        </div>
+        
+        <div class="tabs">
+            <div class="tab active" data-tab="tutorial"><i class="fas fa-graduation-cap"></i> Tutorial</div>
+            <div class="tab" data-tab="mailer"><i class="fas fa-envelope"></i> Mailer</div>
+            <div class="tab" data-tab="code"><i class="fas fa-code"></i> Code Example</div>
+        </div>
+        
+        <div class="tab-content active" id="tutorial-tab">
+            <div class="card">
+                <h2 class="card-title"><i class="fas fa-list-ol"></i> Detailed Steps</h2>
+                
+                <div class="form-group">
+                    <h3>Step 1: Create a GitHub Account (if needed)</h3>
+                    <p>Go to <a href="https://github.com/" target="_blank">github.com</a> and sign up for a free account.</p>
+                </div>
+                
+                <div class="form-group">
+                    <h3>Step 2: Create a New Repository</h3>
+                    <p>Click the "+" icon in the top right and select "New repository".</p>
+                    <p>Name it "smtp-mailer" (or any name you prefer).</p>
+                    <p>Make it public and initialize with a README.</p>
+                </div>
+                
+                <div class="form-group">
+                    <h3>Step 3: Upload the HTML File</h3>
+                    <p>Click "Add file" → "Upload files".</p>
+                    <p>Drag and drop the HTML file or choose it from your computer.</p>
+                    <p>Commit the changes to the main branch.</p>
+                </div>
+                
+                <div class="form-group">
+                    <h3>Step 4: Enable GitHub Pages</h3>
+                    <p>Go to your repository's "Settings" tab.</p>
+                    <p>Select "Pages" from the left sidebar.</p>
+                    <p>Under "Source", select "main" branch and click "Save".</p>
+                    <p>Your site will be published at: https://[username].github.io/[repository-name]</p>
+                </div>
+                
+                <div class="form-group">
+                    <h3>Step 5: Set Up EmailJS</h3>
+                    <p>Sign up for a free account at <a href="https://www.emailjs.com/" target="_blank">emailjs.com</a>.</p>
+                    <p>Add and verify your email service (Gmail, Outlook, etc.).</p>
+                    <p>Get your Public Key from the Account section.</p>
+                </div>
+                
+                <div class="form-group">
+                    <h3>Step 6: Configure the Mailer</h3>
+                    <p>Open your published GitHub Pages site.</p>
+                    <p>Enter your EmailJS Public Key when prompted.</p>
+                    <p>Configure your SMTP settings through the EmailJS interface.</p>
+                </div>
+            </div>
+        </div>
+        
+        <div class="tab-content" id="mailer-tab">
+            <div class="card">
+                <h2 class="card-title"><i class="fas fa-server"></i> SMTP Configuration</h2>
+                <div class="form-group">
+                    <label for="smtp-host">SMTP Host</label>
+                    <input type="text" id="smtp-host" placeholder="e.g., smtp.gmail.com">
+                </div>
+                <div class="form-group">
+                    <label for="smtp-port">SMTP Port</label>
+                    <input type="number" id="smtp-port" placeholder="e.g., 587" value="587">
+                </div>
+                <div class="form-group">
+                    <label for="smtp-user">SMTP Username</label>
+                    <input type="text" id="smtp-user" placeholder="Your email address">
+                </div>
+                <div class="form-group">
+                    <label for="smtp-pass">SMTP Password/App Password</label>
+                    <input type="password" id="smtp-pass" placeholder="Your email password or app password">
+                </div>
+                <div class="form-group">
+                    <label for="from-name">From Name</label>
+                    <input type="text" id="from-name" placeholder="Your name or company">
+                </div>
+                <button id="save-config"><i class="fas fa-save"></i> Save Configuration</button>
+            </div>
+            
+            <div class="card">
+                <h2 class="card-title"><i class="fas fa-envelope"></i> Send Test Email</h2>
+                <div class="form-group">
+                    <label for="to">To</label>
+                    <input type="email" id="to" placeholder="recipient@example.com">
+                </div>
+                <div class="form-group">
+                    <label for="subject">Subject</label>
+                    <input type="text" id="subject" placeholder="Email subject">
+                </div>
+                <div class="form-group">
+                    <label for="message">Message</label>
+                    <textarea id="message" rows="6" placeholder="Your email content"></textarea>
+                </div>
+                <button id="send-single"><i class="fas fa-paper-plane"></i> Send Email</button>
+            </div>
+        </div>
+        
+        <div class="tab-content" id="code-tab">
+            <div class="card">
+                <h2 class="card-title"><i class="fas fa-code"></i> HTML Code Example</h2>
+                <p>Here's the basic structure of the HTML file you need to upload to GitHub:</p>
+                
+                <div class="code-block">
+// Basic HTML structure for your SMTP mailer
+&lt;!DOCTYPE html&gt;
+&lt;html lang="en"&gt;
+&lt;head&gt;
+    &lt;meta charset="UTF-8"&gt;
+    &lt;meta name="viewport" content="width=device-width, initial-scale=1.0"&gt;
+    &lt;title&gt;SMTP Mailer&lt;/title&gt;
+    &lt;script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js"&gt;&lt;/script&gt;
+    &lt;style&gt;
+        /* Your CSS styles here */
+    &lt;/style&gt;
+&lt;/head&gt;
+&lt;body&gt;
+    &lt;div class="container"&gt;
+        &lt;h1&gt;SMTP Mailer&lt;/h1&gt;
+        &lt;!-- Your form elements here --&gt;
+    &lt;/div&gt;
+    &lt;script&gt;
+        // Initialize EmailJS with your public key
+        emailjs.init("YOUR_PUBLIC_KEY");
+        
+        // Your JavaScript code here
+    &lt;/script&gt;
+&lt;/body&gt;
+&lt;/html&gt;
+                </div>
+                
+                <p>Remember to replace "YOUR_PUBLIC_KEY" with your actual EmailJS public key.</p>
+            </div>
+        </div>
+        
+        <div id="status"></div>
+        
+        <div class="instructions">
+            <h3><i class="fas fa-info-circle"></i> Important Notes</h3>
+            <ol>
+                <li>GitHub Pages hosts static sites only (HTML, CSS, JavaScript)</li>
+                <li>You cannot run server-side code on GitHub Pages</li>
+                <li>EmailJS acts as a proxy to handle SMTP requests</li>
+                <li>For Gmail, you may need to generate an App Password if you have 2FA enabled</li>
+                <li>Free EmailJS accounts have limited emails per month</li>
+                <li>For high-volume sending, consider EmailJS paid plans or other services</li>
+            </ol>
+        </div>
+        
+        <footer>
+            <p>SMTP Mailer Tutorial &copy; 2023 | Host on GitHub Pages</p>
+        </footer>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const tabButtons = document.querySelectorAll('.tab');
+            const tabContents = document.querySelectorAll('.tab-content');
+            const saveConfigBtn = document.getElementById('save-config');
+            const sendSingleBtn = document.getElementById('send-single');
+            const statusDiv = document.getElementById('status');
+            
+            // Tab switching logic
+            tabButtons.forEach(tab => {
+                tab.addEventListener('click', () => {
+                    const tabId = tab.getAttribute('data-tab');
+                    
+                    // Update active tab
+                    tabButtons.forEach(t => t.classList.remove('active'));
+                    tab.classList.add('active');
+                    
+                    // Show active content
+                    tabContents.forEach(content => content.classList.remove('active'));
+                    document.getElementById(`${tabId}-tab`).classList.add('active');
+                });
+            });
+            
+            // Save SMTP configuration
+            saveConfigBtn.addEventListener('click', () => {
+                const host = document.getElementById('smtp-host').value;
+                const port = document.getElementById('smtp-port').value;
+                const user = document.getElementById('smtp-user').value;
+                const fromName = document.getElementById('from-name').value;
+                
+                if (!host || !port || !user || !fromName) {
+                    showStatus('Please fill all SMTP configuration fields', 'error');
+                    return;
+                }
+                
+                showStatus('SMTP configuration saved successfully! Note: This is a demo. In a real application, you would connect to EmailJS with your credentials.', 'success');
+            });
+            
+            // Send single email
+            sendSingleBtn.addEventListener('click', () => {
+                const to = document.getElementById('to').value;
+                const subject = document.getElementById('subject').value;
+                const message = document.getElementById('message').value;
+                
+                if (!to || !subject || !message) {
+                    showStatus('Please fill all email fields', 'error');
+                    return;
+                }
+                
+                showStatus('Sending email... This is a demo. In a real application, this would connect to EmailJS to send the message.', 'info');
+                
+                // Simulate sending
+                setTimeout(() => {
+                    showStatus('Email sent successfully! In a real application, this would be sent through your SMTP server via EmailJS.', 'success');
+                }, 2000);
+            });
+            
+            // Helper function to show status messages
+            function showStatus(message, type) {
+                const icon = type === 'success' ? 'fa-check-circle' : 
+                            type === 'error' ? 'fa-exclamation-circle' : 'fa-info-circle';
+                statusDiv.innerHTML = `<div class="alert alert-${type}"><i class="fas ${icon}"></i> ${message}</div>`;
+            }
+        });
+    </script>
+</body>
+</html>
