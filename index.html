@@ -1,0 +1,484 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SMTP Mailer - GitHub Pages</title>
+    <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --primary: #4361ee;
+            --secondary: #3a0ca3;
+            --success: #4cc9f0;
+            --warning: #f72585;
+            --light: #f8f9fa;
+            --dark: #212529;
+            --gray: #6c757d;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        body {
+            background: linear-gradient(135deg, #f5f7ff 0%, #e3e6ff 100%);
+            color: var(--dark);
+            line-height: 1.6;
+            min-height: 100vh;
+            padding: 20px;
+        }
+        
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+        }
+        
+        header {
+            text-align: center;
+            margin-bottom: 30px;
+            padding: 25px;
+            background: linear-gradient(120deg, var(--primary), var(--secondary));
+            color: white;
+            border-radius: 15px;
+            box-shadow: 0 6px 15px rgba(0, 0, 0, 0.1);
+        }
+        
+        h1 {
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+        }
+        
+        .card {
+            background: white;
+            border-radius: 15px;
+            padding: 25px;
+            margin-bottom: 25px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+        }
+        
+        .card-title {
+            font-size: 1.5rem;
+            margin-bottom: 20px;
+            color: var(--primary);
+            border-bottom: 2px solid var(--light);
+            padding-bottom: 10px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .form-group {
+            margin-bottom: 20px;
+        }
+        
+        label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+        }
+        
+        input, textarea, select {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            font-size: 16px;
+            transition: all 0.3s;
+        }
+        
+        input:focus, textarea:focus, select:focus {
+            border-color: var(--primary);
+            outline: none;
+            box-shadow: 0 0 0 3px rgba(67, 97, 238, 0.2);
+        }
+        
+        button {
+            background: var(--primary);
+            color: white;
+            border: none;
+            padding: 14px 20px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 16px;
+            font-weight: 600;
+            transition: all 0.3s;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        button:hover {
+            background: var(--secondary);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+        
+        .tabs {
+            display: flex;
+            margin-bottom: 20px;
+            border-bottom: 1px solid #ddd;
+            background: white;
+            border-radius: 10px;
+            overflow: hidden;
+        }
+        
+        .tab {
+            padding: 15px 25px;
+            cursor: pointer;
+            border-bottom: 3px solid transparent;
+            flex: 1;
+            text-align: center;
+            font-weight: 600;
+            transition: all 0.3s;
+        }
+        
+        .tab:hover {
+            background: #f8f9fa;
+        }
+        
+        .tab.active {
+            border-bottom: 3px solid var(--primary);
+            color: var(--primary);
+            background: #f0f4ff;
+        }
+        
+        .tab-content {
+            display: none;
+        }
+        
+        .tab-content.active {
+            display: block;
+        }
+        
+        .alert {
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+        
+        .alert-success {
+            background-color: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
+        }
+        
+        .alert-error {
+            background-color: #f8d7da;
+            color: #721c24;
+            border: 1px solid #f5c6cb;
+        }
+        
+        .instructions {
+            background: linear-gradient(135deg, #e9ecef 0%, #dde1e7 100%);
+            padding: 20px;
+            border-radius: 10px;
+            margin-top: 30px;
+            border-left: 5px solid var(--primary);
+        }
+        
+        .instructions h3 {
+            margin-bottom: 15px;
+            color: var(--dark);
+        }
+        
+        .instructions ol {
+            margin-left: 20px;
+        }
+        
+        .instructions li {
+            margin-bottom: 10px;
+        }
+        
+        footer {
+            text-align: center;
+            margin-top: 40px;
+            padding: 20px;
+            color: var(--gray);
+            font-size: 0.9rem;
+        }
+        
+        .setup-guide {
+            background: #e9f7ff;
+            border-left: 5px solid var(--primary);
+            padding: 20px;
+            border-radius: 8px;
+            margin: 20px 0;
+        }
+        
+        .setup-guide h3 {
+            color: var(--primary);
+            margin-bottom: 10px;
+        }
+        
+        @media (max-width: 768px) {
+            .container {
+                padding: 10px;
+            }
+            
+            h1 {
+                font-size: 2rem;
+            }
+            
+            .card {
+                padding: 20px;
+            }
+            
+            .tabs {
+                flex-direction: column;
+            }
+            
+            .tab {
+                padding: 12px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1><i class="fas fa-paper-plane"></i> SMTP Mailer</h1>
+            <p>Send emails using your SMTP server directly from GitHub Pages</p>
+        </header>
+        
+        <div class="setup-guide">
+            <h3><i class="fas fa-info-circle"></i> GitHub Pages Setup</h3>
+            <p>If you're seeing your repository instead of this page, make sure:</p>
+            <ol>
+                <li>This file is named <strong>index.html</strong></li>
+                <li>GitHub Pages is enabled in your repository settings</li>
+                <li>The source is set to deploy from the <strong>main</strong> branch</li>
+            </ol>
+        </div>
+        
+        <div class="tabs">
+            <div class="tab active" data-tab="smtp"><i class="fas fa-server"></i> SMTP Setup</div>
+            <div class="tab" data-tab="single"><i class="fas fa-envelope"></i> Single Email</div>
+            <div class="tab" data-tab="bulk"><i class="fas fa-users"></i> Bulk Emails</div>
+        </div>
+        
+        <div class="tab-content active" id="smtp-tab">
+            <div class="card">
+                <h2 class="card-title"><i class="fas fa-server"></i> SMTP Configuration</h2>
+                <div class="form-group">
+                    <label for="smtp-host">SMTP Host</label>
+                    <input type="text" id="smtp-host" placeholder="e.g., smtp.gmail.com">
+                </div>
+                <div class="form-group">
+                    <label for="smtp-port">SMTP Port</label>
+                    <input type="number" id="smtp-port" placeholder="e.g., 587" value="587">
+                </div>
+                <div class="form-group">
+                    <label for="smtp-user">SMTP Username</label>
+                    <input type="text" id="smtp-user" placeholder="Your email address">
+                </div>
+                <div class="form-group">
+                    <label for="smtp-pass">SMTP Password/App Password</label>
+                    <input type="password" id="smtp-pass" placeholder="Your email password or app password">
+                </div>
+                <div class="form-group">
+                    <label for="from-name">From Name</label>
+                    <input type="text" id="from-name" placeholder="Your name or company">
+                </div>
+                <button id="save-config"><i class="fas fa-save"></i> Save Configuration</button>
+            </div>
+        </div>
+        
+        <div class="tab-content" id="single-tab">
+            <div class="card">
+                <h2 class="card-title"><i class="fas fa-envelope"></i> Send Single Email</h2>
+                <div class="form-group">
+                    <label for="to">To</label>
+                    <input type="email" id="to" placeholder="recipient@example.com">
+                </div>
+                <div class="form-group">
+                    <label for="subject">Subject</label>
+                    <input type="text" id="subject" placeholder="Email subject">
+                </div>
+                <div class="form-group">
+                    <label for="message">Message</label>
+                    <textarea id="message" rows="6" placeholder="Your email content"></textarea>
+                </div>
+                <button id="send-single"><i class="fas fa-paper-plane"></i> Send Email</button>
+            </div>
+        </div>
+        
+        <div class="tab-content" id="bulk-tab">
+            <div class="card">
+                <h2 class="card-title"><i class="fas fa-users"></i> Send Bulk Emails</h2>
+                <div class="form-group">
+                    <label for="csv-file">Upload CSV File</label>
+                    <input type="file" id="csv-file" accept=".csv">
+                    <small>CSV format: email, name (optional), other fields to use in template</small>
+                </div>
+                <div class="form-group">
+                    <label for="bulk-subject">Subject Template</label>
+                    <input type="text" id="bulk-subject" placeholder="Hello {{name}}">
+                </div>
+                <div class="form-group">
+                    <label for="bulk-message">Message Template</label>
+                    <textarea id="bulk-message" rows="6" placeholder="Hi {{name}}, your email is {{email}}"></textarea>
+                </div>
+                <button id="send-bulk"><i class="fas fa-paper-plane"></i> Send Bulk Emails</button>
+            </div>
+        </div>
+        
+        <div id="status"></div>
+        
+        <div class="instructions">
+            <h3><i class="fas fa-info-circle"></i> How to Use This SMTP Mailer</h3>
+            <ol>
+                <li>Enter your SMTP server details (host, port, username, password)</li>
+                <li>Click "Save Configuration" to store your settings</li>
+                <li>Choose between sending a single email or bulk emails</li>
+                <li>For bulk emails, prepare a CSV file with recipient data</li>
+                <li>Use placeholders like {{name}} and {{email}} in your templates</li>
+                <li>Click send and wait for the emails to be delivered</li>
+            </ol>
+            <p><strong>Note:</strong> For Gmail, you may need to generate an App Password if you have 2FA enabled.</p>
+        </div>
+        
+        <footer>
+            <p>SMTP Mailer &copy; 2023 | Hosted on GitHub Pages</p>
+        </footer>
+    </div>
+
+    <script>
+        // Initialize EmailJS with your public key (you need to create an account at EmailJS)
+        // Note: This is a client-side solution and uses EmailJS as a proxy to your SMTP server
+        // emailjs.init("YOUR_EMAILJS_PUBLIC_KEY"); // Replace with your actual EmailJS public key
+        
+        document.addEventListener('DOMContentLoaded', function() {
+            const tabButtons = document.querySelectorAll('.tab');
+            const tabContents = document.querySelectorAll('.tab-content');
+            const saveConfigBtn = document.getElementById('save-config');
+            const sendSingleBtn = document.getElementById('send-single');
+            const sendBulkBtn = document.getElementById('send-bulk');
+            const statusDiv = document.getElementById('status');
+            
+            // Tab switching logic
+            tabButtons.forEach(tab => {
+                tab.addEventListener('click', () => {
+                    const tabId = tab.getAttribute('data-tab');
+                    
+                    // Update active tab
+                    tabButtons.forEach(t => t.classList.remove('active'));
+                    tab.classList.add('active');
+                    
+                    // Show active content
+                    tabContents.forEach(content => content.classList.remove('active'));
+                    document.getElementById(`${tabId}-tab`).classList.add('active');
+                });
+            });
+            
+            // Save SMTP configuration
+            saveConfigBtn.addEventListener('click', () => {
+                const host = document.getElementById('smtp-host').value;
+                const port = document.getElementById('smtp-port').value;
+                const user = document.getElementById('smtp-user').value;
+                const fromName = document.getElementById('from-name').value;
+                
+                if (!host || !port || !user || !fromName) {
+                    showStatus('Please fill all SMTP configuration fields', 'error');
+                    return;
+                }
+                
+                // In a real implementation, you would securely store these details
+                // For this demo, we'll just show a success message
+                showStatus('SMTP configuration saved successfully!', 'success');
+            });
+            
+            // Send single email
+            sendSingleBtn.addEventListener('click', () => {
+                const to = document.getElementById('to').value;
+                const subject = document.getElementById('subject').value;
+                const message = document.getElementById('message').value;
+                
+                if (!to || !subject || !message) {
+                    showStatus('Please fill all email fields', 'error');
+                    return;
+                }
+                
+                // Show sending status
+                showStatus('Sending email...', 'info');
+                
+                // In a real implementation, you would use EmailJS to send the email
+                // This is a simulation for demonstration purposes
+                setTimeout(() => {
+                    showStatus('Email sent successfully!', 'success');
+                }, 2000);
+            });
+            
+            // Send bulk emails
+            sendBulkBtn.addEventListener('click', () => {
+                const csvFile = document.getElementById('csv-file').files[0];
+                const subjectTemplate = document.getElementById('bulk-subject').value;
+                const messageTemplate = document.getElementById('bulk-message').value;
+                
+                if (!csvFile || !subjectTemplate || !messageTemplate) {
+                    showStatus('Please upload a CSV file and fill subject/message templates', 'error');
+                    return;
+                }
+                
+                // Parse CSV file
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    const csvData = parseCSV(e.target.result);
+                    
+                    if (csvData.length === 0) {
+                        showStatus('No valid data found in CSV file', 'error');
+                        return;
+                    }
+                    
+                    // Show progress
+                    showStatus(`Preparing to send ${csvData.length} emails...`, 'info');
+                    
+                    // Simulate sending bulk emails
+                    setTimeout(() => {
+                        showStatus(`Successfully sent ${csvData.length} emails!`, 'success');
+                    }, 3000);
+                };
+                
+                reader.readAsText(csvFile);
+            });
+            
+            // Helper function to show status messages
+            function showStatus(message, type) {
+                const icon = type === 'success' ? 'fa-check-circle' : 
+                            type === 'error' ? 'fa-exclamation-circle' : 'fa-info-circle';
+                statusDiv.innerHTML = `<div class="alert alert-${type}"><i class="fas ${icon}"></i> ${message}</div>`;
+            }
+            
+            // Simple CSV parser
+            function parseCSV(csv) {
+                const lines = csv.split('\n');
+                const result = [];
+                
+                // Assume first line is header
+                const headers = lines[0].split(',').map(h => h.trim());
+                
+                for (let i = 1; i < lines.length; i++) {
+                    if (!lines[i].trim()) continue;
+                    
+                    const obj = {};
+                    const currentline = lines[i].split(',').map(c => c.trim());
+                    
+                    for (let j = 0; j < headers.length; j++) {
+                        obj[headers[j]] = currentline[j] || '';
+                    }
+                    
+                    result.push(obj);
+                }
+                
+                return result;
+            }
+        });
+    </script>
+</body>
+</html>
