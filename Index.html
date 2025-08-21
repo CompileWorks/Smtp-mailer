@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>SMTP Mailer - Hosting Tutorial</title>
+    <title>SMTP Mailer - Host on GitHub Pages</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         :root {
@@ -237,25 +237,6 @@
             border: 1px solid #f5c6cb;
         }
         
-        .progress {
-            height: 25px;
-            background-color: #e9ecef;
-            border-radius: 8px;
-            margin-bottom: 20px;
-            overflow: hidden;
-            box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.1);
-        }
-        
-        .progress-bar {
-            height: 100%;
-            background: linear-gradient(90deg, var(--success), #3aafd6);
-            text-align: center;
-            line-height: 25px;
-            color: white;
-            transition: width 0.3s;
-            font-weight: 600;
-        }
-        
         .instructions {
             background: linear-gradient(135deg, #e9ecef 0%, #dde1e7 100%);
             padding: 20px;
@@ -292,67 +273,20 @@
             box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
         }
         
-        .editor-container {
-            border: 1px solid #ddd;
-            border-radius: 8px;
-            overflow: hidden;
-            margin-bottom: 20px;
-        }
-        
-        .toolbar {
-            background: #f8f9fa;
-            padding: 10px;
-            border-bottom: 1px solid #ddd;
-            display: flex;
-            flex-wrap: wrap;
-            gap: 5px;
-        }
-        
-        .toolbar button {
-            padding: 8px 12px;
-            background: white;
-            color: var(--dark);
-            border: 1px solid #ddd;
-            border-radius: 5px;
-            font-size: 14px;
-        }
-        
-        .toolbar button:hover {
-            background: #e9ecef;
-            transform: none;
-            box-shadow: none;
-        }
-        
-        #html-editor {
-            min-height: 250px;
-            padding: 15px;
-        }
-        
-        .preview-container {
-            background: #f8f9fa;
-            border: 1px solid #ddd;
-            border-radius: 8px;
+        .info-box {
+            background: #e9f7ff;
+            border-left: 5px solid var(--primary);
             padding: 20px;
-            margin-top: 20px;
+            border-radius: 8px;
+            margin: 20px 0;
         }
         
-        .preview-title {
-            font-size: 1.2rem;
-            margin-bottom: 15px;
-            color: var(--dark);
+        .info-box h3 {
+            color: var(--primary);
+            margin-bottom: 10px;
             display: flex;
             align-items: center;
             gap: 10px;
-        }
-        
-        .code-block {
-            background: #2d2d2d;
-            color: #f8f8f2;
-            padding: 15px;
-            border-radius: 8px;
-            margin: 15px 0;
-            overflow-x: auto;
-            font-family: 'Fira Code', monospace;
         }
         
         @media (max-width: 768px) {
@@ -381,186 +315,175 @@
 <body>
     <div class="container">
         <header>
-            <h1><i class="fas fa-paper-plane logo"></i> SMTP Mailer Tutorial</h1>
-            <p>Step-by-step guide to hosting and using the SMTP Mailer on GitHub</p>
+            <h1><i class="fas fa-paper-plane logo"></i> SMTP Mailer</h1>
+            <p>Host on GitHub Pages with index.html</p>
         </header>
+        
+        <div class="info-box">
+            <h3><i class="fas fa-info-circle"></i> Why index.html?</h3>
+            <p>GitHub Pages automatically looks for an <strong>index.html</strong> file as the default page for your site. Using this filename ensures your site loads correctly without needing to specify the HTML file in the URL.</p>
+        </div>
         
         <div class="steps">
             <div class="step-card">
                 <div class="step-number">1</div>
-                <h3>Create GitHub Account</h3>
-                <p>If you don't have one, create a free account at github.com</p>
+                <h3>Create Repository</h3>
+                <p>Create a new GitHub repository named <strong>username.github.io</strong> (replace "username" with your GitHub username).</p>
             </div>
             
             <div class="step-card">
                 <div class="step-number">2</div>
-                <h3>Create a New Repository</h3>
-                <p>Create a new repository named "smtp-mailer" (or similar)</p>
+                <h3>Name it index.html</h3>
+                <p>Save your HTML file as <strong>index.html</strong> and upload it to your repository.</p>
             </div>
             
             <div class="step-card">
                 <div class="step-number">3</div>
                 <h3>Enable GitHub Pages</h3>
-                <p>Go to Settings → Pages → Select "main" branch → Save</p>
+                <p>Go to Settings → Pages → Select "main" branch → Save.</p>
             </div>
             
             <div class="step-card">
                 <div class="step-number">4</div>
-                <h3>Sign up for EmailJS</h3>
-                <p>Create a free account at emailjs.com to handle SMTP</p>
+                <h3>Access Your Site</h3>
+                <p>Your SMTP mailer will be available at <strong>https://username.github.io</strong></p>
             </div>
         </div>
         
         <div class="tabs">
-            <div class="tab active" data-tab="tutorial"><i class="fas fa-graduation-cap"></i> Tutorial</div>
-            <div class="tab" data-tab="mailer"><i class="fas fa-envelope"></i> Mailer</div>
-            <div class="tab" data-tab="code"><i class="fas fa-code"></i> Code Example</div>
+            <div class="tab active" data-tab="why"><i class="fas fa-question-circle"></i> Why index.html?</div>
+            <div class="tab" data-tab="naming"><i class="fas fa-file-signature"></i> File Naming</div>
+            <div class="tab" data-tab="example"><i class="fas fa-code"></i> Code Example</div>
         </div>
         
-        <div class="tab-content active" id="tutorial-tab">
+        <div class="tab-content active" id="why-tab">
             <div class="card">
-                <h2 class="card-title"><i class="fas fa-list-ol"></i> Detailed Steps</h2>
+                <h2 class="card-title"><i class="fas fa-check-circle"></i> Benefits of Using index.html</h2>
                 
                 <div class="form-group">
-                    <h3>Step 1: Create a GitHub Account (if needed)</h3>
-                    <p>Go to <a href="https://github.com/" target="_blank">github.com</a> and sign up for a free account.</p>
+                    <h3>1. Default Page Loading</h3>
+                    <p>Web servers automatically look for an index.html file when a directory is requested. This means visitors can access your site with a clean URL like <strong>https://username.github.io</strong> instead of <strong>https://username.github.io/filename.html</strong>.</p>
                 </div>
                 
                 <div class="form-group">
-                    <h3>Step 2: Create a New Repository</h3>
-                    <p>Click the "+" icon in the top right and select "New repository".</p>
-                    <p>Name it "smtp-mailer" (or any name you prefer).</p>
-                    <p>Make it public and initialize with a README.</p>
+                    <h3>2. Professional Appearance</h3>
+                    <p>Using index.html gives your site a more professional look with cleaner URLs that are easier to share and remember.</p>
                 </div>
                 
                 <div class="form-group">
-                    <h3>Step 3: Upload the HTML File</h3>
-                    <p>Click "Add file" → "Upload files".</p>
-                    <p>Drag and drop the HTML file or choose it from your computer.</p>
-                    <p>Commit the changes to the main branch.</p>
+                    <h3>3. GitHub Pages Convention</h3>
+                    <p>GitHub Pages is specifically designed to look for an index.html file as the landing page for your site. Using this filename follows platform best practices.</p>
                 </div>
                 
                 <div class="form-group">
-                    <h3>Step 4: Enable GitHub Pages</h3>
-                    <p>Go to your repository's "Settings" tab.</p>
-                    <p>Select "Pages" from the left sidebar.</p>
-                    <p>Under "Source", select "main" branch and click "Save".</p>
-                    <p>Your site will be published at: https://[username].github.io/[repository-name]</p>
-                </div>
-                
-                <div class="form-group">
-                    <h3>Step 5: Set Up EmailJS</h3>
-                    <p>Sign up for a free account at <a href="https://www.emailjs.com/" target="_blank">emailjs.com</a>.</p>
-                    <p>Add and verify your email service (Gmail, Outlook, etc.).</p>
-                    <p>Get your Public Key from the Account section.</p>
-                </div>
-                
-                <div class="form-group">
-                    <h3>Step 6: Configure the Mailer</h3>
-                    <p>Open your published GitHub Pages site.</p>
-                    <p>Enter your EmailJS Public Key when prompted.</p>
-                    <p>Configure your SMTP settings through the EmailJS interface.</p>
+                    <h3>4. Future Flexibility</h3>
+                    <p>If you later add more pages to your site, using index.html as your main page follows standard web development conventions that will make your site structure clearer.</p>
                 </div>
             </div>
         </div>
         
-        <div class="tab-content" id="mailer-tab">
+        <div class="tab-content" id="naming-tab">
             <div class="card">
-                <h2 class="card-title"><i class="fas fa-server"></i> SMTP Configuration</h2>
+                <h2 class="card-title"><i class="fas fa-file"></i> File Naming Guidelines</h2>
+                
                 <div class="form-group">
-                    <label for="smtp-host">SMTP Host</label>
-                    <input type="text" id="smtp-host" placeholder="e.g., smtp.gmail.com">
+                    <h3>Correct Naming</h3>
+                    <p>For GitHub Pages, your main HTML file should be named:</p>
+                    <div class="info-box">
+                        <p><strong>index.html</strong> (all lowercase, no spaces)</p>
+                    </div>
+                    <p>This is the default file that GitHub Pages will serve when someone visits your root URL.</p>
                 </div>
+                
                 <div class="form-group">
-                    <label for="smtp-port">SMTP Port</label>
-                    <input type="number" id="smtp-port" placeholder="e.g., 587" value="587">
+                    <h3>Incorrect Naming Examples</h3>
+                    <p>Avoid these naming patterns:</p>
+                    <ul>
+                        <li><s>Index.html</s> (should be all lowercase)</li>
+                        <li><s>INDEX.HTML</s> (should be all lowercase)</li>
+                        <li><s>smtp mailer.html</s> (spaces in filename)</li>
+                        <li><s>smtp_mailer.html</s> (not the default page)</li>
+                    </ul>
                 </div>
+                
                 <div class="form-group">
-                    <label for="smtp-user">SMTP Username</label>
-                    <input type="text" id="smtp-user" placeholder="Your email address">
+                    <h3>Repository Structure</h3>
+                    <p>Your GitHub repository should have a structure similar to this:</p>
+                    <div class="info-box">
+                        <p>username.github.io/ (repository name)<br>
+                        └── index.html (your main HTML file)<br>
+                        └── README.md (optional documentation)<br>
+                        └── assets/ (optional folder for images, CSS, JS)<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;├── style.css<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;└── script.js</p>
+                    </div>
                 </div>
-                <div class="form-group">
-                    <label for="smtp-pass">SMTP Password/App Password</label>
-                    <input type="password" id="smtp-pass" placeholder="Your email password or app password">
-                </div>
-                <div class="form-group">
-                    <label for="from-name">From Name</label>
-                    <input type="text" id="from-name" placeholder="Your name or company">
-                </div>
-                <button id="save-config"><i class="fas fa-save"></i> Save Configuration</button>
-            </div>
-            
-            <div class="card">
-                <h2 class="card-title"><i class="fas fa-envelope"></i> Send Test Email</h2>
-                <div class="form-group">
-                    <label for="to">To</label>
-                    <input type="email" id="to" placeholder="recipient@example.com">
-                </div>
-                <div class="form-group">
-                    <label for="subject">Subject</label>
-                    <input type="text" id="subject" placeholder="Email subject">
-                </div>
-                <div class="form-group">
-                    <label for="message">Message</label>
-                    <textarea id="message" rows="6" placeholder="Your email content"></textarea>
-                </div>
-                <button id="send-single"><i class="fas fa-paper-plane"></i> Send Email</button>
             </div>
         </div>
         
-        <div class="tab-content" id="code-tab">
+        <div class="tab-content" id="example-tab">
             <div class="card">
-                <h2 class="card-title"><i class="fas fa-code"></i> HTML Code Example</h2>
-                <p>Here's the basic structure of the HTML file you need to upload to GitHub:</p>
+                <h2 class="card-title"><i class="fas fa-code"></i> HTML Structure Example</h2>
                 
-                <div class="code-block">
-// Basic HTML structure for your SMTP mailer
+                <div class="form-group">
+                    <h3>Basic index.html Structure</h3>
+                    <p>Here's a simplified version of how your index.html should be structured:</p>
+                    
+                    <div class="info-box">
+                        <pre>
 &lt;!DOCTYPE html&gt;
 &lt;html lang="en"&gt;
 &lt;head&gt;
     &lt;meta charset="UTF-8"&gt;
     &lt;meta name="viewport" content="width=device-width, initial-scale=1.0"&gt;
-    &lt;title&gt;SMTP Mailer&lt;/title&gt;
-    &lt;script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js"&gt;&lt;/script&gt;
+    &lt;title&gt;SMTP Mailer - GitHub Hosted&lt;/title&gt;
+    &lt;!-- CSS and JavaScript links go here --&gt;
     &lt;style&gt;
-        /* Your CSS styles here */
+        /* Your CSS styles */
     &lt;/style&gt;
 &lt;/head&gt;
 &lt;body&gt;
     &lt;div class="container"&gt;
         &lt;h1&gt;SMTP Mailer&lt;/h1&gt;
-        &lt;!-- Your form elements here --&gt;
+        &lt;!-- Your content here --&gt;
     &lt;/div&gt;
     &lt;script&gt;
-        // Initialize EmailJS with your public key
-        emailjs.init("YOUR_PUBLIC_KEY");
-        
-        // Your JavaScript code here
+        // Your JavaScript code
     &lt;/script&gt;
 &lt;/body&gt;
 &lt;/html&gt;
+                        </pre>
+                    </div>
                 </div>
                 
-                <p>Remember to replace "YOUR_PUBLIC_KEY" with your actual EmailJS public key.</p>
+                <div class="form-group">
+                    <h3>GitHub Pages URL Format</h3>
+                    <p>When you use index.html as your filename, your GitHub Pages site will be accessible at:</p>
+                    <div class="info-box">
+                        <p><strong>https://username.github.io</strong></p>
+                    </div>
+                    <p>If you use any other filename (e.g., smtp-mailer.html), your URL would be:</p>
+                    <div class="info-box">
+                        <p><strong>https://username.github.io/smtp-mailer.html</strong></p>
+                    </div>
+                    <p>Using index.html provides the cleanest, most professional URL for your SMTP mailer.</p>
+                </div>
             </div>
         </div>
         
-        <div id="status"></div>
-        
         <div class="instructions">
-            <h3><i class="fas fa-info-circle"></i> Important Notes</h3>
+            <h3><i class="fas fa-info-circle"></i> Important Notes for GitHub Pages</h3>
             <ol>
-                <li>GitHub Pages hosts static sites only (HTML, CSS, JavaScript)</li>
-                <li>You cannot run server-side code on GitHub Pages</li>
-                <li>EmailJS acts as a proxy to handle SMTP requests</li>
-                <li>For Gmail, you may need to generate an App Password if you have 2FA enabled</li>
-                <li>Free EmailJS accounts have limited emails per month</li>
-                <li>For high-volume sending, consider EmailJS paid plans or other services</li>
+                <li>Your repository must be named <strong>username.github.io</strong> (replace "username" with your GitHub username)</li>
+                <li>Your index.html file must be in the root of the repository, not in a subfolder</li>
+                <li>GitHub Pages may take 1-2 minutes to publish your site after you push changes</li>
+                <li>You can use custom domains, but the index.html filename requirement remains</li>
+                <li>For project sites (not user sites), the repository can have a different name, but index.html is still the default page</li>
             </ol>
         </div>
         
         <footer>
-            <p>SMTP Mailer Tutorial &copy; 2023 | Host on GitHub Pages</p>
+            <p>SMTP Mailer Hosting Guide &copy; 2023 | Use index.html for GitHub Pages</p>
         </footer>
     </div>
 
@@ -568,9 +491,6 @@
         document.addEventListener('DOMContentLoaded', function() {
             const tabButtons = document.querySelectorAll('.tab');
             const tabContents = document.querySelectorAll('.tab-content');
-            const saveConfigBtn = document.getElementById('save-config');
-            const sendSingleBtn = document.getElementById('send-single');
-            const statusDiv = document.getElementById('status');
             
             // Tab switching logic
             tabButtons.forEach(tab => {
@@ -586,47 +506,6 @@
                     document.getElementById(`${tabId}-tab`).classList.add('active');
                 });
             });
-            
-            // Save SMTP configuration
-            saveConfigBtn.addEventListener('click', () => {
-                const host = document.getElementById('smtp-host').value;
-                const port = document.getElementById('smtp-port').value;
-                const user = document.getElementById('smtp-user').value;
-                const fromName = document.getElementById('from-name').value;
-                
-                if (!host || !port || !user || !fromName) {
-                    showStatus('Please fill all SMTP configuration fields', 'error');
-                    return;
-                }
-                
-                showStatus('SMTP configuration saved successfully! Note: This is a demo. In a real application, you would connect to EmailJS with your credentials.', 'success');
-            });
-            
-            // Send single email
-            sendSingleBtn.addEventListener('click', () => {
-                const to = document.getElementById('to').value;
-                const subject = document.getElementById('subject').value;
-                const message = document.getElementById('message').value;
-                
-                if (!to || !subject || !message) {
-                    showStatus('Please fill all email fields', 'error');
-                    return;
-                }
-                
-                showStatus('Sending email... This is a demo. In a real application, this would connect to EmailJS to send the message.', 'info');
-                
-                // Simulate sending
-                setTimeout(() => {
-                    showStatus('Email sent successfully! In a real application, this would be sent through your SMTP server via EmailJS.', 'success');
-                }, 2000);
-            });
-            
-            // Helper function to show status messages
-            function showStatus(message, type) {
-                const icon = type === 'success' ? 'fa-check-circle' : 
-                            type === 'error' ? 'fa-exclamation-circle' : 'fa-info-circle';
-                statusDiv.innerHTML = `<div class="alert alert-${type}"><i class="fas ${icon}"></i> ${message}</div>`;
-            }
         });
     </script>
 </body>
