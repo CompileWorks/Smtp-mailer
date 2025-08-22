@@ -3,8 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>SMTP Mailer - GitHub Pages</title>
-    <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js"></script>
+    <title>HTML Email Uploader - SMTP Mailer</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         :root {
@@ -33,7 +32,7 @@
         }
         
         .container {
-            max-width: 1000px;
+            max-width: 1200px;
             margin: 0 auto;
         }
         
@@ -48,8 +47,16 @@
         }
         
         h1 {
-            font-size: 2.5rem;
+            font-size: 2.8rem;
             margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 15px;
+        }
+        
+        .logo {
+            font-size: 2.5rem;
         }
         
         .card {
@@ -58,6 +65,11 @@
             padding: 25px;
             margin-bottom: 25px;
             box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+            transition: transform 0.3s;
+        }
+        
+        .card:hover {
+            transform: translateY(-5px);
         }
         
         .card-title {
@@ -79,11 +91,12 @@
             display: block;
             margin-bottom: 8px;
             font-weight: 600;
+            color: var(--dark);
         }
         
         input, textarea, select {
             width: 100%;
-            padding: 12px;
+            padding: 14px;
             border: 1px solid #ddd;
             border-radius: 8px;
             font-size: 16px;
@@ -100,7 +113,7 @@
             background: var(--primary);
             color: white;
             border: none;
-            padding: 14px 20px;
+            padding: 14px 25px;
             border-radius: 8px;
             cursor: pointer;
             font-size: 16px;
@@ -115,6 +128,22 @@
             background: var(--secondary);
             transform: translateY(-2px);
             box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+        
+        .btn-success {
+            background: var(--success);
+        }
+        
+        .btn-success:hover {
+            background: #3aafd6;
+        }
+        
+        .btn-warning {
+            background: var(--warning);
+        }
+        
+        .btn-warning:hover {
+            background: #d61a6b;
         }
         
         .tabs {
@@ -175,6 +204,12 @@
             border: 1px solid #f5c6cb;
         }
         
+        .alert-info {
+            background-color: #cce5ff;
+            color: #004085;
+            border: 1px solid #b8daff;
+        }
+        
         .instructions {
             background: linear-gradient(135deg, #e9ecef 0%, #dde1e7 100%);
             padding: 20px;
@@ -186,6 +221,9 @@
         .instructions h3 {
             margin-bottom: 15px;
             color: var(--dark);
+            display: flex;
+            align-items: center;
+            gap: 10px;
         }
         
         .instructions ol {
@@ -193,18 +231,22 @@
         }
         
         .instructions li {
-            margin-bottom: 10px;
+            margin-bottom: 12px;
+            padding-left: 5px;
         }
         
         footer {
             text-align: center;
             margin-top: 40px;
-            padding: 20px;
+            padding: 25px;
             color: var(--gray);
             font-size: 0.9rem;
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
         }
         
-        .setup-guide {
+        .info-box {
             background: #e9f7ff;
             border-left: 5px solid var(--primary);
             padding: 20px;
@@ -212,9 +254,82 @@
             margin: 20px 0;
         }
         
-        .setup-guide h3 {
+        .info-box h3 {
             color: var(--primary);
             margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .preview-container {
+            background: #f8f9fa;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            padding: 20px;
+            margin-top: 20px;
+            height: 300px;
+            overflow: auto;
+        }
+        
+        .preview-title {
+            font-size: 1.2rem;
+            margin-bottom: 15px;
+            color: var(--dark);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .upload-area {
+            border: 2px dashed #4361ee;
+            border-radius: 8px;
+            padding: 30px;
+            text-align: center;
+            margin-bottom: 20px;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        
+        .upload-area:hover {
+            background-color: #f0f4ff;
+        }
+        
+        .upload-icon {
+            font-size: 3rem;
+            color: #4361ee;
+            margin-bottom: 15px;
+        }
+        
+        .template-list {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+            gap: 20px;
+            margin-top: 20px;
+        }
+        
+        .template-item {
+            background: white;
+            border-radius: 8px;
+            padding: 15px;
+            box-shadow: 0 3px 10px rgba(0, 0, 0, 0.1);
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        
+        .template-item:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+        }
+        
+        .template-item h4 {
+            margin-bottom: 10px;
+            color: var(--primary);
+        }
+        
+        .template-item p {
+            color: var(--gray);
+            font-size: 0.9rem;
         }
         
         @media (max-width: 768px) {
@@ -223,7 +338,7 @@
             }
             
             h1 {
-                font-size: 2rem;
+                font-size: 2.2rem;
             }
             
             .card {
@@ -237,130 +352,154 @@
             .tab {
                 padding: 12px;
             }
+            
+            .template-list {
+                grid-template-columns: 1fr;
+            }
         }
     </style>
 </head>
 <body>
     <div class="container">
         <header>
-            <h1><i class="fas fa-paper-plane"></i> SMTP Mailer</h1>
-            <p>Send emails using your SMTP server directly from GitHub Pages</p>
+            <h1><i class="fas fa-file-upload logo"></i> HTML Email Uploader</h1>
+            <p>Upload and send unique HTML email templates with your SMTP Mailer</p>
         </header>
         
-        <div class="setup-guide">
-            <h3><i class="fas fa-info-circle"></i> GitHub Pages Setup</h3>
-            <p>If you're seeing your repository instead of this page, make sure:</p>
-            <ol>
-                <li>This file is named <strong>index.html</strong></li>
-                <li>GitHub Pages is enabled in your repository settings</li>
-                <li>The source is set to deploy from the <strong>main</strong> branch</li>
-            </ol>
+        <div class="info-box">
+            <h3><i class="fas fa-info-circle"></i> How It Works</h3>
+            <p>Upload your HTML email templates directly through this interface. The templates will be stored in your browser's local storage and can be used with your SMTP mailer.</p>
         </div>
         
         <div class="tabs">
-            <div class="tab active" data-tab="smtp"><i class="fas fa-server"></i> SMTP Setup</div>
-            <div class="tab" data-tab="single"><i class="fas fa-envelope"></i> Single Email</div>
-            <div class="tab" data-tab="bulk"><i class="fas fa-users"></i> Bulk Emails</div>
+            <div class="tab active" data-tab="upload"><i class="fas fa-upload"></i> Upload HTML</div>
+            <div class="tab" data-tab="templates"><i class="fas fa-list"></i> My Templates</div>
+            <div class="tab" data-tab="send"><i class="fas fa-paper-plane"></i> Send Email</div>
         </div>
         
-        <div class="tab-content active" id="smtp-tab">
+        <div class="tab-content active" id="upload-tab">
             <div class="card">
-                <h2 class="card-title"><i class="fas fa-server"></i> SMTP Configuration</h2>
-                <div class="form-group">
-                    <label for="smtp-host">SMTP Host</label>
-                    <input type="text" id="smtp-host" placeholder="e.g., smtp.gmail.com">
+                <h2 class="card-title"><i class="fas fa-upload"></i> Upload HTML Email Template</h2>
+                
+                <div class="upload-area" id="drop-area">
+                    <div class="upload-icon">
+                        <i class="fas fa-cloud-upload-alt"></i>
+                    </div>
+                    <h3>Drag & Drop your HTML file here</h3>
+                    <p>or</p>
+                    <button id="browse-btn"><i class="fas fa-folder-open"></i> Browse Files</button>
+                    <input type="file" id="file-input" accept=".html,.htm" style="display: none;">
                 </div>
+                
                 <div class="form-group">
-                    <label for="smtp-port">SMTP Port</label>
-                    <input type="number" id="smtp-port" placeholder="e.g., 587" value="587">
+                    <label for="template-name">Template Name</label>
+                    <input type="text" id="template-name" placeholder="Give your template a name">
                 </div>
+                
                 <div class="form-group">
-                    <label for="smtp-user">SMTP Username</label>
-                    <input type="text" id="smtp-user" placeholder="Your email address">
+                    <label for="template-description">Description (Optional)</label>
+                    <textarea id="template-description" placeholder="Brief description of this template" rows="2"></textarea>
                 </div>
-                <div class="form-group">
-                    <label for="smtp-pass">SMTP Password/App Password</label>
-                    <input type="password" id="smtp-pass" placeholder="Your email password or app password">
-                </div>
-                <div class="form-group">
-                    <label for="from-name">From Name</label>
-                    <input type="text" id="from-name" placeholder="Your name or company">
-                </div>
-                <button id="save-config"><i class="fas fa-save"></i> Save Configuration</button>
+                
+                <button id="upload-btn" disabled><i class="fas fa-upload"></i> Upload Template</button>
             </div>
         </div>
         
-        <div class="tab-content" id="single-tab">
+        <div class="tab-content" id="templates-tab">
             <div class="card">
-                <h2 class="card-title"><i class="fas fa-envelope"></i> Send Single Email</h2>
-                <div class="form-group">
-                    <label for="to">To</label>
-                    <input type="email" id="to" placeholder="recipient@example.com">
+                <h2 class="card-title"><i class="fas fa-list"></i> My Email Templates</h2>
+                <p>Select a template to preview or use for sending emails</p>
+                
+                <div id="templates-container">
+                    <div class="template-list" id="template-list">
+                        <!-- Templates will be loaded here -->
+                    </div>
+                    
+                    <div id="no-templates-message" style="text-align: center; padding: 30px; display: none;">
+                        <i class="fas fa-inbox" style="font-size: 3rem; color: #ddd; margin-bottom: 15px;"></i>
+                        <h3>No templates yet</h3>
+                        <p>Upload your first HTML email template to get started</p>
+                    </div>
                 </div>
-                <div class="form-group">
-                    <label for="subject">Subject</label>
-                    <input type="text" id="subject" placeholder="Email subject">
-                </div>
-                <div class="form-group">
-                    <label for="message">Message</label>
-                    <textarea id="message" rows="6" placeholder="Your email content"></textarea>
-                </div>
-                <button id="send-single"><i class="fas fa-paper-plane"></i> Send Email</button>
             </div>
         </div>
         
-        <div class="tab-content" id="bulk-tab">
+        <div class="tab-content" id="send-tab">
             <div class="card">
-                <h2 class="card-title"><i class="fas fa-users"></i> Send Bulk Emails</h2>
+                <h2 class="card-title"><i class="fas fa-paper-plane"></i> Send HTML Email</h2>
+                
                 <div class="form-group">
-                    <label for="csv-file">Upload CSV File</label>
-                    <input type="file" id="csv-file" accept=".csv">
-                    <small>CSV format: email, name (optional), other fields to use in template</small>
+                    <label for="select-template">Select Template</label>
+                    <select id="select-template">
+                        <option value="">-- Select a template --</option>
+                        <!-- Templates will be loaded here -->
+                    </select>
                 </div>
+                
                 <div class="form-group">
-                    <label for="bulk-subject">Subject Template</label>
-                    <input type="text" id="bulk-subject" placeholder="Hello {{name}}">
+                    <label for="recipient-email">Recipient Email</label>
+                    <input type="email" id="recipient-email" placeholder="recipient@example.com">
                 </div>
+                
                 <div class="form-group">
-                    <label for="bulk-message">Message Template</label>
-                    <textarea id="bulk-message" rows="6" placeholder="Hi {{name}}, your email is {{email}}"></textarea>
+                    <label for="email-subject">Email Subject</label>
+                    <input type="text" id="email-subject" placeholder="Subject line for your email">
                 </div>
-                <button id="send-bulk"><i class="fas fa-paper-plane"></i> Send Bulk Emails</button>
+                
+                <div class="preview-container">
+                    <h3 class="preview-title"><i class="fas fa-eye"></i> Template Preview</h3>
+                    <div id="template-preview">
+                        <p style="text-align: center; color: #6c757d; margin-top: 50px;">
+                            Select a template to preview it here
+                        </p>
+                    </div>
+                </div>
+                
+                <button id="send-html-email"><i class="fas fa-paper-plane"></i> Send HTML Email</button>
             </div>
         </div>
         
         <div id="status"></div>
         
         <div class="instructions">
-            <h3><i class="fas fa-info-circle"></i> How to Use This SMTP Mailer</h3>
+            <h3><i class="fas fa-info-circle"></i> Instructions</h3>
             <ol>
-                <li>Enter your SMTP server details (host, port, username, password)</li>
-                <li>Click "Save Configuration" to store your settings</li>
-                <li>Choose between sending a single email or bulk emails</li>
-                <li>For bulk emails, prepare a CSV file with recipient data</li>
-                <li>Use placeholders like {{name}} and {{email}} in your templates</li>
-                <li>Click send and wait for the emails to be delivered</li>
+                <li>Create your HTML email template in any code editor</li>
+                <li>Save it as an HTML file (.html or .htm extension)</li>
+                <li>Upload it using the "Upload HTML" tab</li>
+                <li>Give it a descriptive name and optional description</li>
+                <li>Select your template from the "My Templates" tab to preview it</li>
+                <li>Use the "Send Email" tab to send your HTML email to recipients</li>
+                <li>All templates are stored locally in your browser</li>
             </ol>
-            <p><strong>Note:</strong> For Gmail, you may need to generate an App Password if you have 2FA enabled.</p>
         </div>
         
         <footer>
-            <p>SMTP Mailer &copy; 2023 | Hosted on GitHub Pages</p>
+            <p>HTML Email Uploader &copy; 2023 | Part of SMTP Mailer on GitHub Pages</p>
         </footer>
     </div>
 
     <script>
-        // Initialize EmailJS with your public key (you need to create an account at EmailJS)
-        // Note: This is a client-side solution and uses EmailJS as a proxy to your SMTP server
-        // emailjs.init("YOUR_EMAILJS_PUBLIC_KEY"); // Replace with your actual EmailJS public key
-        
         document.addEventListener('DOMContentLoaded', function() {
             const tabButtons = document.querySelectorAll('.tab');
             const tabContents = document.querySelectorAll('.tab-content');
-            const saveConfigBtn = document.getElementById('save-config');
-            const sendSingleBtn = document.getElementById('send-single');
-            const sendBulkBtn = document.getElementById('send-bulk');
+            const fileInput = document.getElementById('file-input');
+            const browseBtn = document.getElementById('browse-btn');
+            const uploadBtn = document.getElementById('upload-btn');
+            const dropArea = document.getElementById('drop-area');
             const statusDiv = document.getElementById('status');
+            const templateList = document.getElementById('template-list');
+            const noTemplatesMsg = document.getElementById('no-templates-message');
+            const selectTemplate = document.getElementById('select-template');
+            const templatePreview = document.getElementById('template-preview');
+            const sendHtmlBtn = document.getElementById('send-html-email');
+            
+            let currentTemplate = null;
+            let templates = JSON.parse(localStorage.getItem('htmlTemplates')) || [];
+            
+            // Initialize the interface
+            loadTemplates();
+            updateTemplateDropdown();
             
             // Tab switching logic
             tabButtons.forEach(tab => {
@@ -374,109 +513,239 @@
                     // Show active content
                     tabContents.forEach(content => content.classList.remove('active'));
                     document.getElementById(`${tabId}-tab`).classList.add('active');
+                    
+                    // If switching to templates tab, refresh the list
+                    if (tabId === 'templates') {
+                        loadTemplates();
+                    }
                 });
             });
             
-            // Save SMTP configuration
-            saveConfigBtn.addEventListener('click', () => {
-                const host = document.getElementById('smtp-host').value;
-                const port = document.getElementById('smtp-port').value;
-                const user = document.getElementById('smtp-user').value;
-                const fromName = document.getElementById('from-name').value;
-                
-                if (!host || !port || !user || !fromName) {
-                    showStatus('Please fill all SMTP configuration fields', 'error');
-                    return;
-                }
-                
-                // In a real implementation, you would securely store these details
-                // For this demo, we'll just show a success message
-                showStatus('SMTP configuration saved successfully!', 'success');
+            // File upload handling
+            browseBtn.addEventListener('click', () => {
+                fileInput.click();
             });
             
-            // Send single email
-            sendSingleBtn.addEventListener('click', () => {
-                const to = document.getElementById('to').value;
-                const subject = document.getElementById('subject').value;
-                const message = document.getElementById('message').value;
-                
-                if (!to || !subject || !message) {
-                    showStatus('Please fill all email fields', 'error');
-                    return;
-                }
-                
-                // Show sending status
-                showStatus('Sending email...', 'info');
-                
-                // In a real implementation, you would use EmailJS to send the email
-                // This is a simulation for demonstration purposes
-                setTimeout(() => {
-                    showStatus('Email sent successfully!', 'success');
-                }, 2000);
+            fileInput.addEventListener('change', handleFileSelect);
+            
+            // Drag and drop handling
+            dropArea.addEventListener('dragover', (e) => {
+                e.preventDefault();
+                dropArea.style.backgroundColor = '#f0f4ff';
             });
             
-            // Send bulk emails
-            sendBulkBtn.addEventListener('click', () => {
-                const csvFile = document.getElementById('csv-file').files[0];
-                const subjectTemplate = document.getElementById('bulk-subject').value;
-                const messageTemplate = document.getElementById('bulk-message').value;
+            dropArea.addEventListener('dragleave', () => {
+                dropArea.style.backgroundColor = '';
+            });
+            
+            dropArea.addEventListener('drop', (e) => {
+                e.preventDefault();
+                dropArea.style.backgroundColor = '';
                 
-                if (!csvFile || !subjectTemplate || !messageTemplate) {
-                    showStatus('Please upload a CSV file and fill subject/message templates', 'error');
+                if (e.dataTransfer.files.length) {
+                    handleFileSelect({ target: { files: e.dataTransfer.files } });
+                }
+            });
+            
+            // Upload button
+            uploadBtn.addEventListener('click', uploadTemplate);
+            
+            // Send email button
+            sendHtmlBtn.addEventListener('click', sendHtmlEmail);
+            
+            // Template selection
+            selectTemplate.addEventListener('change', function() {
+                const templateId = this.value;
+                if (templateId) {
+                    currentTemplate = templates.find(t => t.id === templateId);
+                    if (currentTemplate) {
+                        templatePreview.innerHTML = currentTemplate.content;
+                    }
+                } else {
+                    currentTemplate = null;
+                    templatePreview.innerHTML = '<p style="text-align: center; color: #6c757d; margin-top: 50px;">Select a template to preview it here</p>';
+                }
+            });
+            
+            // Handle file selection
+            function handleFileSelect(e) {
+                const file = e.target.files[0];
+                if (!file) return;
+                
+                if (!file.type.includes('html')) {
+                    showStatus('Please select an HTML file', 'error');
                     return;
                 }
                 
-                // Parse CSV file
                 const reader = new FileReader();
                 reader.onload = function(e) {
-                    const csvData = parseCSV(e.target.result);
-                    
-                    if (csvData.length === 0) {
-                        showStatus('No valid data found in CSV file', 'error');
-                        return;
+                    const templateName = document.getElementById('template-name');
+                    if (!templateName.value) {
+                        templateName.value = file.name.replace('.html', '').replace('.htm', '');
                     }
                     
-                    // Show progress
-                    showStatus(`Preparing to send ${csvData.length} emails...`, 'info');
-                    
-                    // Simulate sending bulk emails
-                    setTimeout(() => {
-                        showStatus(`Successfully sent ${csvData.length} emails!`, 'success');
-                    }, 3000);
+                    uploadBtn.disabled = false;
+                    showStatus('File selected: ' + file.name, 'success');
                 };
+                reader.readAsText(file);
+            }
+            
+            // Upload template
+            function uploadTemplate() {
+                const file = fileInput.files[0];
+                if (!file) {
+                    showStatus('Please select a file first', 'error');
+                    return;
+                }
                 
-                reader.readAsText(csvFile);
-            });
+                const templateName = document.getElementById('template-name').value;
+                if (!templateName) {
+                    showStatus('Please provide a template name', 'error');
+                    return;
+                }
+                
+                const templateDescription = document.getElementById('template-description').value;
+                
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    const template = {
+                        id: Date.now().toString(),
+                        name: templateName,
+                        description: templateDescription,
+                        filename: file.name,
+                        content: e.target.result,
+                        uploaded: new Date().toISOString()
+                    };
+                    
+                    templates.push(template);
+                    localStorage.setItem('htmlTemplates', JSON.stringify(templates));
+                    
+                    showStatus('Template uploaded successfully!', 'success');
+                    
+                    // Reset form
+                    fileInput.value = '';
+                    document.getElementById('template-name').value = '';
+                    document.getElementById('template-description').value = '';
+                    uploadBtn.disabled = true;
+                    
+                    // Refresh templates list
+                    loadTemplates();
+                    updateTemplateDropdown();
+                    
+                    // Switch to templates tab
+                    tabButtons.forEach(t => t.classList.remove('active'));
+                    document.querySelector('[data-tab="templates"]').classList.add('active');
+                    tabContents.forEach(content => content.classList.remove('active'));
+                    document.getElementById('templates-tab').classList.add('active');
+                };
+                reader.readAsText(file);
+            }
+            
+            // Load templates into the list
+            function loadTemplates() {
+                if (templates.length === 0) {
+                    noTemplatesMsg.style.display = 'block';
+                    templateList.innerHTML = '';
+                    return;
+                }
+                
+                noTemplatesMsg.style.display = 'none';
+                templateList.innerHTML = '';
+                
+                templates.forEach(template => {
+                    const templateItem = document.createElement('div');
+                    templateItem.className = 'template-item';
+                    templateItem.innerHTML = `
+                        <h4>${template.name}</h4>
+                        <p>${template.description || 'No description'}</p>
+                        <p><small>Uploaded: ${new Date(template.uploaded).toLocaleDateString()}</small></p>
+                        <button class="use-template-btn" data-id="${template.id}" style="margin-top: 10px;">
+                            <i class="fas fa-eye"></i> Preview
+                        </button>
+                        <button class="delete-template-btn" data-id="${template.id}" style="margin-top: 10px; background: #e63946;">
+                            <i class="fas fa-trash"></i> Delete
+                        </button>
+                    `;
+                    templateList.appendChild(templateItem);
+                });
+                
+                // Add event listeners to the buttons
+                document.querySelectorAll('.use-template-btn').forEach(btn => {
+                    btn.addEventListener('click', function() {
+                        const templateId = this.getAttribute('data-id');
+                        selectTemplate.value = templateId;
+                        selectTemplate.dispatchEvent(new Event('change'));
+                        
+                        // Switch to send tab
+                        tabButtons.forEach(t => t.classList.remove('active'));
+                        document.querySelector('[data-tab="send"]').classList.add('active');
+                        tabContents.forEach(content => content.classList.remove('active'));
+                        document.getElementById('send-tab').classList.add('active');
+                    });
+                });
+                
+                document.querySelectorAll('.delete-template-btn').forEach(btn => {
+                    btn.addEventListener('click', function() {
+                        const templateId = this.getAttribute('data-id');
+                        if (confirm('Are you sure you want to delete this template?')) {
+                            templates = templates.filter(t => t.id !== templateId);
+                            localStorage.setItem('htmlTemplates', JSON.stringify(templates));
+                            loadTemplates();
+                            updateTemplateDropdown();
+                            showStatus('Template deleted', 'success');
+                        }
+                    });
+                });
+            }
+            
+            // Update template dropdown
+            function updateTemplateDropdown() {
+                selectTemplate.innerHTML = '<option value="">-- Select a template --</option>';
+                
+                templates.forEach(template => {
+                    const option = document.createElement('option');
+                    option.value = template.id;
+                    option.textContent = template.name;
+                    selectTemplate.appendChild(option);
+                });
+            }
+            
+            // Send HTML email
+            function sendHtmlEmail() {
+                const recipientEmail = document.getElementById('recipient-email').value;
+                const emailSubject = document.getElementById('email-subject').value;
+                
+                if (!currentTemplate) {
+                    showStatus('Please select a template first', 'error');
+                    return;
+                }
+                
+                if (!recipientEmail || !emailSubject) {
+                    showStatus('Please fill in recipient email and subject', 'error');
+                    return;
+                }
+                
+                showStatus('Sending HTML email...', 'info');
+                
+                // In a real implementation, you would use EmailJS to send the HTML email
+                // For this demo, we'll simulate the process
+                setTimeout(() => {
+                    showStatus(`HTML email sent to ${recipientEmail} successfully!`, 'success');
+                }, 2000);
+            }
             
             // Helper function to show status messages
             function showStatus(message, type) {
                 const icon = type === 'success' ? 'fa-check-circle' : 
                             type === 'error' ? 'fa-exclamation-circle' : 'fa-info-circle';
                 statusDiv.innerHTML = `<div class="alert alert-${type}"><i class="fas ${icon}"></i> ${message}</div>`;
-            }
-            
-            // Simple CSV parser
-            function parseCSV(csv) {
-                const lines = csv.split('\n');
-                const result = [];
                 
-                // Assume first line is header
-                const headers = lines[0].split(',').map(h => h.trim());
-                
-                for (let i = 1; i < lines.length; i++) {
-                    if (!lines[i].trim()) continue;
-                    
-                    const obj = {};
-                    const currentline = lines[i].split(',').map(c => c.trim());
-                    
-                    for (let j = 0; j < headers.length; j++) {
-                        obj[headers[j]] = currentline[j] || '';
-                    }
-                    
-                    result.push(obj);
+                // Auto hide success messages after 5 seconds
+                if (type === 'success') {
+                    setTimeout(() => {
+                        statusDiv.innerHTML = '';
+                    }, 5000);
                 }
-                
-                return result;
             }
         });
     </script>
