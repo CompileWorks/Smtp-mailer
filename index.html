@@ -3,7 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>HTML Email Uploader - SMTP Mailer</title>
+    <title>SMTP Mailer with EmailJS Integration</title>
+    <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         :root {
@@ -332,6 +333,27 @@
             font-size: 0.9rem;
         }
         
+        .config-status {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-top: 15px;
+            padding: 10px;
+            border-radius: 8px;
+            background: #f8f9fa;
+        }
+        
+        .status-indicator {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            background: #6c757d;
+        }
+        
+        .status-indicator.connected {
+            background: var(--success);
+        }
+        
         @media (max-width: 768px) {
             .container {
                 padding: 10px;
@@ -362,22 +384,64 @@
 <body>
     <div class="container">
         <header>
-            <h1><i class="fas fa-file-upload logo"></i> HTML Email Uploader</h1>
-            <p>Upload and send unique HTML email templates with your SMTP Mailer</p>
+            <h1><i class="fas fa-paper-plane logo"></i> SMTP Mailer</h1>
+            <p>Send HTML emails with your EmailJS API key</p>
         </header>
         
         <div class="info-box">
-            <h3><i class="fas fa-info-circle"></i> How It Works</h3>
-            <p>Upload your HTML email templates directly through this interface. The templates will be stored in your browser's local storage and can be used with your SMTP mailer.</p>
+            <h3><i class="fas fa-info-circle"></i> EmailJS Integration Complete</h3>
+            <p>Your EmailJS Public Key has been integrated. You can now upload HTML templates and send emails.</p>
         </div>
         
         <div class="tabs">
-            <div class="tab active" data-tab="upload"><i class="fas fa-upload"></i> Upload HTML</div>
-            <div class="tab" data-tab="templates"><i class="fas fa-list"></i> My Templates</div>
+            <div class="tab active" data-tab="config"><i class="fas fa-cog"></i> Configuration</div>
+            <div class="tab" data-tab="upload"><i class="fas fa-upload"></i> Upload HTML</div>
             <div class="tab" data-tab="send"><i class="fas fa-paper-plane"></i> Send Email</div>
         </div>
         
-        <div class="tab-content active" id="upload-tab">
+        <div class="tab-content active" id="config-tab">
+            <div class="card">
+                <h2 class="card-title"><i class="fas fa-cog"></i> EmailJS Configuration</h2>
+                
+                <div class="form-group">
+                    <label for="emailjs-key">EmailJS Public Key</label>
+                    <input type="text" id="emailjs-key" value="4EtvudxPqkByaXIVs" readonly>
+                    <small>Your public key is pre-configured and ready to use</small>
+                </div>
+                
+                <div class="form-group">
+                    <label for="emailjs-service">EmailJS Service ID</label>
+                    <input type="text" id="emailjs-service" placeholder="Enter your EmailJS Service ID">
+                    <small>Found in your EmailJS dashboard under "Email Services"</small>
+                </div>
+                
+                <div class="form-group">
+                    <label for="emailjs-template">EmailJS Template ID</label>
+                    <input type="text" id="emailjs-template" placeholder="Enter your EmailJS Template ID">
+                    <small>Create an email template in your EmailJS dashboard</small>
+                </div>
+                
+                <button id="save-emailjs-config"><i class="fas fa-save"></i> Save Configuration</button>
+                
+                <div class="config-status">
+                    <div class="status-indicator" id="status-indicator"></div>
+                    <span id="status-text">Public key configured - add Service and Template IDs</span>
+                </div>
+            </div>
+            
+            <div class="instructions">
+                <h3><i class="fas fa-info-circle"></i> How to Get Your EmailJS Details</h3>
+                <ol>
+                    <li>Sign in to your <a href="https://dashboard.emailjs.com/admin" target="_blank">EmailJS dashboard</a></li>
+                    <li>Your <strong>Public Key</strong> is already configured (see above)</li>
+                    <li>Your <strong>Service ID</strong> is in the Email Services section (you need to set up an email service first)</li>
+                    <li>Your <strong>Template ID</strong> is in the Email Templates section (you need to create a template first)</li>
+                    <li>Save your configuration to enable email sending</li>
+                </ol>
+            </div>
+        </div>
+        
+        <div class="tab-content" id="upload-tab">
             <div class="card">
                 <h2 class="card-title"><i class="fas fa-upload"></i> Upload HTML Email Template</h2>
                 
@@ -402,25 +466,6 @@
                 </div>
                 
                 <button id="upload-btn" disabled><i class="fas fa-upload"></i> Upload Template</button>
-            </div>
-        </div>
-        
-        <div class="tab-content" id="templates-tab">
-            <div class="card">
-                <h2 class="card-title"><i class="fas fa-list"></i> My Email Templates</h2>
-                <p>Select a template to preview or use for sending emails</p>
-                
-                <div id="templates-container">
-                    <div class="template-list" id="template-list">
-                        <!-- Templates will be loaded here -->
-                    </div>
-                    
-                    <div id="no-templates-message" style="text-align: center; padding: 30px; display: none;">
-                        <i class="fas fa-inbox" style="font-size: 3rem; color: #ddd; margin-bottom: 15px;"></i>
-                        <h3>No templates yet</h3>
-                        <p>Upload your first HTML email template to get started</p>
-                    </div>
-                </div>
             </div>
         </div>
         
@@ -462,25 +507,26 @@
         <div id="status"></div>
         
         <div class="instructions">
-            <h3><i class="fas fa-info-circle"></i> Instructions</h3>
+            <h3><i class="fas fa-info-circle"></i> How It Works</h3>
             <ol>
-                <li>Create your HTML email template in any code editor</li>
-                <li>Save it as an HTML file (.html or .htm extension)</li>
-                <li>Upload it using the "Upload HTML" tab</li>
-                <li>Give it a descriptive name and optional description</li>
-                <li>Select your template from the "My Templates" tab to preview it</li>
-                <li>Use the "Send Email" tab to send your HTML email to recipients</li>
+                <li>Configure your EmailJS settings with your Service ID and Template ID</li>
+                <li>Upload HTML email templates using the Upload tab</li>
+                <li>Select a template and enter recipient details in the Send tab</li>
+                <li>Send your HTML emails directly through EmailJS</li>
                 <li>All templates are stored locally in your browser</li>
             </ol>
         </div>
         
         <footer>
-            <p>HTML Email Uploader &copy; 2023 | Part of SMTP Mailer on GitHub Pages</p>
+            <p>SMTP Mailer with EmailJS Integration &copy; 2023 | Hosted on GitHub Pages</p>
         </footer>
     </div>
 
     <script>
         document.addEventListener('DOMContentLoaded', function() {
+            // Initialize EmailJS with your public key
+            emailjs.init("4EtvudxPqkByaXIVs");
+            
             const tabButtons = document.querySelectorAll('.tab');
             const tabContents = document.querySelectorAll('.tab-content');
             const fileInput = document.getElementById('file-input');
@@ -488,18 +534,23 @@
             const uploadBtn = document.getElementById('upload-btn');
             const dropArea = document.getElementById('drop-area');
             const statusDiv = document.getElementById('status');
-            const templateList = document.getElementById('template-list');
-            const noTemplatesMsg = document.getElementById('no-templates-message');
             const selectTemplate = document.getElementById('select-template');
             const templatePreview = document.getElementById('template-preview');
             const sendHtmlBtn = document.getElementById('send-html-email');
+            const saveConfigBtn = document.getElementById('save-emailjs-config');
+            const statusIndicator = document.getElementById('status-indicator');
+            const statusText = document.getElementById('status-text');
             
             let currentTemplate = null;
             let templates = JSON.parse(localStorage.getItem('htmlTemplates')) || [];
+            let emailjsConfig = JSON.parse(localStorage.getItem('emailjsConfig')) || {
+                publicKey: "4EtvudxPqkByaXIVs"
+            };
             
             // Initialize the interface
             loadTemplates();
             updateTemplateDropdown();
+            loadEmailJSConfig();
             
             // Tab switching logic
             tabButtons.forEach(tab => {
@@ -513,11 +564,6 @@
                     // Show active content
                     tabContents.forEach(content => content.classList.remove('active'));
                     document.getElementById(`${tabId}-tab`).classList.add('active');
-                    
-                    // If switching to templates tab, refresh the list
-                    if (tabId === 'templates') {
-                        loadTemplates();
-                    }
                 });
             });
             
@@ -553,6 +599,9 @@
             // Send email button
             sendHtmlBtn.addEventListener('click', sendHtmlEmail);
             
+            // Save configuration button
+            saveConfigBtn.addEventListener('click', saveEmailJSConfig);
+            
             // Template selection
             selectTemplate.addEventListener('change', function() {
                 const templateId = this.value;
@@ -566,6 +615,49 @@
                     templatePreview.innerHTML = '<p style="text-align: center; color: #6c757d; margin-top: 50px;">Select a template to preview it here</p>';
                 }
             });
+            
+            // Load EmailJS configuration
+            function loadEmailJSConfig() {
+                if (emailjsConfig.serviceID) {
+                    document.getElementById('emailjs-service').value = emailjsConfig.serviceID;
+                }
+                
+                if (emailjsConfig.templateID) {
+                    document.getElementById('emailjs-template').value = emailjsConfig.templateID;
+                }
+                
+                updateConfigStatus();
+            }
+            
+            // Save EmailJS configuration
+            function saveEmailJSConfig() {
+                const serviceID = document.getElementById('emailjs-service').value;
+                const templateID = document.getElementById('emailjs-template').value;
+                
+                if (!serviceID || !templateID) {
+                    showStatus('Please fill all EmailJS configuration fields', 'error');
+                    return;
+                }
+                
+                emailjsConfig.serviceID = serviceID;
+                emailjsConfig.templateID = templateID;
+                
+                localStorage.setItem('emailjsConfig', JSON.stringify(emailjsConfig));
+                
+                showStatus('EmailJS configuration saved successfully!', 'success');
+                updateConfigStatus();
+            }
+            
+            // Update configuration status
+            function updateConfigStatus() {
+                if (emailjsConfig.serviceID && emailjsConfig.templateID) {
+                    statusIndicator.classList.add('connected');
+                    statusText.textContent = 'Fully configured and ready to send emails';
+                } else {
+                    statusIndicator.classList.remove('connected');
+                    statusText.textContent = 'Public key configured - add Service and Template IDs';
+                }
+            }
             
             // Handle file selection
             function handleFileSelect(e) {
@@ -631,12 +723,6 @@
                     // Refresh templates list
                     loadTemplates();
                     updateTemplateDropdown();
-                    
-                    // Switch to templates tab
-                    tabButtons.forEach(t => t.classList.remove('active'));
-                    document.querySelector('[data-tab="templates"]').classList.add('active');
-                    tabContents.forEach(content => content.classList.remove('active'));
-                    document.getElementById('templates-tab').classList.add('active');
                 };
                 reader.readAsText(file);
             }
@@ -644,58 +730,10 @@
             // Load templates into the list
             function loadTemplates() {
                 if (templates.length === 0) {
-                    noTemplatesMsg.style.display = 'block';
-                    templateList.innerHTML = '';
                     return;
                 }
                 
-                noTemplatesMsg.style.display = 'none';
-                templateList.innerHTML = '';
-                
-                templates.forEach(template => {
-                    const templateItem = document.createElement('div');
-                    templateItem.className = 'template-item';
-                    templateItem.innerHTML = `
-                        <h4>${template.name}</h4>
-                        <p>${template.description || 'No description'}</p>
-                        <p><small>Uploaded: ${new Date(template.uploaded).toLocaleDateString()}</small></p>
-                        <button class="use-template-btn" data-id="${template.id}" style="margin-top: 10px;">
-                            <i class="fas fa-eye"></i> Preview
-                        </button>
-                        <button class="delete-template-btn" data-id="${template.id}" style="margin-top: 10px; background: #e63946;">
-                            <i class="fas fa-trash"></i> Delete
-                        </button>
-                    `;
-                    templateList.appendChild(templateItem);
-                });
-                
-                // Add event listeners to the buttons
-                document.querySelectorAll('.use-template-btn').forEach(btn => {
-                    btn.addEventListener('click', function() {
-                        const templateId = this.getAttribute('data-id');
-                        selectTemplate.value = templateId;
-                        selectTemplate.dispatchEvent(new Event('change'));
-                        
-                        // Switch to send tab
-                        tabButtons.forEach(t => t.classList.remove('active'));
-                        document.querySelector('[data-tab="send"]').classList.add('active');
-                        tabContents.forEach(content => content.classList.remove('active'));
-                        document.getElementById('send-tab').classList.add('active');
-                    });
-                });
-                
-                document.querySelectorAll('.delete-template-btn').forEach(btn => {
-                    btn.addEventListener('click', function() {
-                        const templateId = this.getAttribute('data-id');
-                        if (confirm('Are you sure you want to delete this template?')) {
-                            templates = templates.filter(t => t.id !== templateId);
-                            localStorage.setItem('htmlTemplates', JSON.stringify(templates));
-                            loadTemplates();
-                            updateTemplateDropdown();
-                            showStatus('Template deleted', 'success');
-                        }
-                    });
-                });
+                updateTemplateDropdown();
             }
             
             // Update template dropdown
@@ -725,13 +763,32 @@
                     return;
                 }
                 
+                if (!emailjsConfig.serviceID || !emailjsConfig.templateID) {
+                    showStatus('Please configure EmailJS first in the Configuration tab', 'error');
+                    return;
+                }
+                
                 showStatus('Sending HTML email...', 'info');
                 
-                // In a real implementation, you would use EmailJS to send the HTML email
-                // For this demo, we'll simulate the process
-                setTimeout(() => {
-                    showStatus(`HTML email sent to ${recipientEmail} successfully!`, 'success');
-                }, 2000);
+                // Prepare template parameters for EmailJS
+                const templateParams = {
+                    to_email: recipientEmail,
+                    subject: emailSubject,
+                    message: currentTemplate.content,
+                    from_name: "SMTP Mailer",
+                    reply_to: "noreply@example.com"
+                };
+                
+                // Send email using EmailJS
+                emailjs.send(
+                    emailjsConfig.serviceID, 
+                    emailjsConfig.templateID, 
+                    templateParams
+                ).then(function(response) {
+                    showStatus(`HTML email sent to ${recipientEmail} successfully! Status: ${response.status}`, 'success');
+                }, function(error) {
+                    showStatus(`Failed to send email. Error: ${error.text}`, 'error');
+                });
             }
             
             // Helper function to show status messages
